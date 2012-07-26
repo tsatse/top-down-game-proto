@@ -1,4 +1,4 @@
-game-proto
-==========
+proto
+=====
 
 game prototypes and tests
