@@ -27,32 +27,34 @@ onload = function() {
 
         keydown: function(event) {
             var moveUnit = 0.2;
-            switch(event.keyCode) {
-                case 'W'.charCodeAt():
-                case 'Z'.charCodeAt():
-                case 38:
-                    event.preventDefault();
-                    this.direction.y = -moveUnit;
-                    break;
-                case 'A'.charCodeAt():
-                case 'Q'.charCodeAt():
-                case 37:
-                    event.preventDefault();
-                    this.direction.x = -moveUnit;
-                    break;
-                case 'S'.charCodeAt():
-                case 40:
-                    event.preventDefault();
-                    this.direction.y = moveUnit;
-                    break;
-                case 'D'.charCodeAt():
-                case 39:
-                    event.preventDefault();
-                    this.direction.x = moveUnit;
-                    break;
-                case 'X'.charCodeAt():
-                    this.hit();
-                    break;
+            if(!event.ctrlKey) {
+                switch(event.keyCode) {
+                    case 'W'.charCodeAt():
+                    case 'Z'.charCodeAt():
+                    case 38:
+                        event.preventDefault();
+                        this.direction.y = -moveUnit;
+                        break;
+                    case 'A'.charCodeAt():
+                    case 'Q'.charCodeAt():
+                    case 37:
+                        event.preventDefault();
+                        this.direction.x = -moveUnit;
+                        break;
+                    case 'S'.charCodeAt():
+                    case 40:
+                        event.preventDefault();
+                        this.direction.y = moveUnit;
+                        break;
+                    case 'D'.charCodeAt():
+                    case 39:
+                        event.preventDefault();
+                        this.direction.x = moveUnit;
+                        break;
+                    case 'X'.charCodeAt():
+                        this.hit();
+                        break;
+                }
             }
         },
 
