@@ -20,6 +20,7 @@ onload = function() {
                 idle: [0]
             };
             this.phase = 0;
+            this.frameNumber = 0;
         },
         hit: function() {
             this.hitPhase = this.phase;
@@ -94,12 +95,14 @@ onload = function() {
             else if(this.direction.x < 0) {
                 action = 'goLeft';
             }
+            if(action !== 'idle') {
+                var animArray = this.spriter[action];
+                this.frameNumber = animArray[Math.floor(this.phase) % animArray.length];
+            }
 
-            var animArray = this.spriter[action];
-            var frameNumber = animArray[Math.floor(this.phase) % animArray.length];
             return {
-                x: Math.floor(this.spriter.tileWidth * (frameNumber % this.spriter.width)),
-                y: Math.floor(this.spriter.tileHeight * Math.floor(frameNumber / this.spriter.width)),
+                x: Math.floor(this.spriter.tileWidth * (this.frameNumber % this.spriter.width)),
+                y: Math.floor(this.spriter.tileHeight * Math.floor(this.frameNumber / this.spriter.width)),
                 invert: invert
             };
         },
