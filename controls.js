@@ -8,6 +8,8 @@ onload = function() {
         resetState: function() {
             this.pos = {x: 0, y: 0};
             this.direction = {x: 0, y: 0};
+            this.facing = 'down';
+            this.animState = 0;
             this.spriter = {
                 tileWidth: 32,
                 tileHeight: 32,
@@ -17,10 +19,12 @@ onload = function() {
                 goRight: [6, 7, 8, 7],
                 goDown: [0, 1, 2, 1],
                 goLeft: [3, 4, 5, 4],
-                idle: [0]
+                idleDown: [1],
+                idleLeft: [3],
+                idleUp: [10],
+                idleRight: [6]
             };
             this.phase = 0;
-            this.frameNumber = 0;
         },
         hit: function() {
             this.hitPhase = this.phase;
@@ -35,22 +39,26 @@ onload = function() {
                     case 38:
                         event.preventDefault();
                         this.direction.y = -moveUnit;
+                        this.facing = 'up';
                         break;
                     case 'A'.charCodeAt():
                     case 'Q'.charCodeAt():
                     case 37:
                         event.preventDefault();
                         this.direction.x = -moveUnit;
+                        this.facing = 'left';
                         break;
                     case 'S'.charCodeAt():
                     case 40:
                         event.preventDefault();
                         this.direction.y = moveUnit;
+                        this.facing = 'down';
                         break;
                     case 'D'.charCodeAt():
                     case 39:
                         event.preventDefault();
                         this.direction.x = moveUnit;
+                        this.facing = 'right';
                         break;
                     case 'X'.charCodeAt():
                         this.hit();
@@ -66,8 +74,8 @@ onload = function() {
                 case 'S'.charCodeAt():
                 case 38:
                 case 40:
-                    event.preventDefault();
                     this.direction.y = 0;
+
                     break;
                 case 'A'.charCodeAt():
                 case 'Q'.charCodeAt():
@@ -82,7 +90,6 @@ onload = function() {
 
         getTileCoords: function() {
             var action = 'idle';
-            var invert = false;
             if(this.direction.y < 0) {
                 action = 'goUp';
             }
@@ -95,15 +102,28 @@ onload = function() {
             else if(this.direction.x < 0) {
                 action = 'goLeft';
             }
-            if(action !== 'idle') {
-                var animArray = this.spriter[action];
-                this.frameNumber = animArray[Math.floor(this.phase) % animArray.length];
+            else {
+                switch(this.facing) {
+                    case 'left':
+                        action = 'idleLeft';
+                        break;
+                    case 'right':
+                        action = 'idleRight';
+                        break;
+                    case 'up':
+                        action = 'idleUp';
+                        break;
+                    case 'down':
+                        action = 'idleDown';
+                        break;
+                }
             }
+            var animArray = this.spriter[action];
+            this.frameNumber = animArray[Math.floor(this.phase) % animArray.length];
 
             return {
                 x: Math.floor(this.spriter.tileWidth * (this.frameNumber % this.spriter.width)),
-                y: Math.floor(this.spriter.tileHeight * Math.floor(this.frameNumber / this.spriter.width)),
-                invert: invert
+                y: Math.floor(this.spriter.tileHeight * Math.floor(this.frameNumber / this.spriter.width))
             };
         },
 
